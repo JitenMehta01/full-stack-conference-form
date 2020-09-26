@@ -32,4 +32,3 @@ jobRoleSelect.addEventListener('click', e =>{
             }, 400)
     }
 })
-
