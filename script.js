@@ -50,7 +50,6 @@ function removeAllChildNodes(parent) {
     option.textContent = textContent;
     const disable = document.createAttribute(disabled);
     const select = document.createAttribute(selected);
-    select.value = 'selected';
     option.setAttributeNode(disable);
     option.setAttributeNode(select);
    
@@ -74,21 +73,21 @@ other.style.transition = 'all .3s ease-in';
 other.style.opacity = '0';
 other.style.top = '20px';
 
-// Removed all options in the color selection element and preappends on option element.
-
-function tShirt (){
-    removeAllChildNodes(tShirtSelection);
-    tShirtSelection.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected'));
-   }
-
 // adding a choose here option for the job role seletion element
 window.onload = (() =>{
 
     jobRoleSelect.prepend( selectedOption('option', 'Choose here', 'disabled', 'selected'));
-    tShirt();
 
+    tShirt();
 })
 
+// Removed all options in the color selection element and preappends on option element.
+
+ function tShirt (){
+    removeAllChildNodes(tShirtSelection);
+    tShirtSelection.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected'));
+   }
+   
 
 /*****************************************************************************************************************************************
  * 
@@ -132,12 +131,31 @@ jobRoleSelect.addEventListener('change', e =>{
 
     designSelection.addEventListener('change', e =>{
         if(designSelection.value !== 'select theme'){
-            for(let i =0; i < tShirtSelectionNodes.length; i++){
-                tShirtSelection.appendChild(tShirtSelectionNodes[i]);
-            }
-            console.log(tShirtSelection);
-            } else{
+
+
+
+            const js_puns = tShirtSelectionNodes;
+            const iLoveJs = js_puns.splice(3, 6);
+            console.log(js_puns);
+            console.log(iLoveJs);
+
+            if(designSelection.value === 'js puns'){
+                for(let i =0; i < js_puns.length;i++){
                 removeAllChildNodes(tShirtSelection);
-                tShirtSelection.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected'));
+                tShirtSelection.appendChild(js_puns[i])
+                }
+            } else {
+                for(let i =0; i < iLoveJs.length;i++){
+                removeAllChildNodes(tShirtSelection);
+                tShirtSelection.appendChild(iLoveJs[i]);
+                }
+            }
+
+        
             } 
     })
+
+
+
+
+
