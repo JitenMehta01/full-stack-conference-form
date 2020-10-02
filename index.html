@@ -7,6 +7,11 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+  <!-- Added defaultValue = 'off' to each select element. This specifically allow firefox to set an explicit default option value
+ taken from = https://stackoverflow.com/questions/4831848/firefox-ignores-option-selected-selected/10096033#10096033
+-->
+
 	<div class="container">
     
     <header>
@@ -26,7 +31,8 @@
         <input type="email" id="mail" name="user-email">
         
         <label for="title">Job Role</label>
-        <select id="title" name="user-title">
+        <select id="title" name="user-title" autocomplete="off">
+          <option disabled = "" selected='selected' value="select_jobrole">Select job title</option>
           <option value="front-end developer">Front End Developer</option>
           <option value="back-end developer">Back End Developer</option>
           <option value="designer">Designer</option>          
@@ -45,9 +51,10 @@
         <div class="shirt-box">
           <div>
             <label for="size">Size:</label>
-            <select id="size" name="user-size">
+            <select id="size" name="user-size" autocomplete="off">
+              <option disabled = "" selected='selected' value="select__tshirt_size">Select t-shirt size</option>
               <option value="small">S</option>
-              <option value="medium" selected>M</option>
+              <option value="medium">M</option>
               <option value="large">L</option>
               <option value="extra large">XL</option>
             </select>
@@ -55,8 +62,8 @@
 
           <div>
             <label for="design">Design:</label>
-            <select id="design" name="user-design">
-              <option disabled = "" selected = "selected" value="select theme">Select Theme</option>
+            <select id="design" name="user-design" autocomplete="off">
+              <option disabled = "" selected='selected' value="select_tshirt_design">Select Theme</option>
               <option value="js puns">Theme - JS Puns</option>
               <option value="heart js">Theme - I &#9829; JS</option>
             </select>
@@ -64,7 +71,7 @@
 
           <div id="shirt-colors" class="shirt-colors">
             <label for="color">Color:</label>
-            <select id="color">
+            <select id="color" autocomplete="off">             
               <option value="cornflowerblue">Cornflower Blue (JS Puns shirt only)</option>
               <option value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option> 
               <option value="gold">Gold (JS Puns shirt only)</option>
@@ -111,8 +118,8 @@
         <legend>Payment Info</legend>
 
         <label for="payment">I'm going to pay with:</label>
-        <select id="payment" name="user-payment">
-          <option value="select method">Select Payment Method</option>
+        <select id="payment" name="user-payment" autocomplete="off">
+          <option disabled = "" selected='selected' value="select_payment">Select a payment method</option>
           <option value="credit card">Credit Card</option>
           <option value="paypal">PayPal</option>
           <option value="bitcoin">Bitcoin</option>
@@ -136,7 +143,8 @@
           </div>
 
           <label for="exp-month">Expiration Date:</label>
-          <select id="exp-month" name="user-exp-month">
+          <select id="exp-month" name="user-exp-month" autocomplete="off">
+            <option disabled = "" selected='selected' value="select_exp_month">Select a expiration month</option>
             <option value="1">1 - January</option>
             <option value="2">2 - February</option>
             <option value="3">3 - March</option>
@@ -151,7 +159,8 @@
             <option value="12">12 - December</option>          		          
           </select>
           <label for="exp-year">Expiration Year:</label>
-          <select id="exp-year" name="user-exp-year">
+          <select id="exp-year" name="user-exp-year" autocomplete="off">
+            <option disabled = "" selected='selected' value="select_exp_year">Select a expiration year</option>
             <option value="2016">2016</option>
             <option value="2017">2017</option>
             <option value="2018">2018</option>

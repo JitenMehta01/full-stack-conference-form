@@ -8,10 +8,13 @@ const firstInputText = document.querySelector('input[type=text]');
 const other = document.querySelector('#other');
 
 const jobRoleSelect = document.querySelector('#title');
-const tShirtSelection = document.querySelector('#color');  
-let tShirtSelectionNodes = []; 
+const tShirtSelectionColor = document.querySelector('#color');  
+
+const js_puns = []; // All t-shirt colour options will be pushed to this array.
+let iLoveJs; // All iloveJs colour tshirts will be spliced from js_puns and pushed into this variable.
 
 const designSelection = document.querySelector('#design');  
+
 
 
 
@@ -20,18 +23,14 @@ const designSelection = document.querySelector('#design');
  * FUNCTIONS
  * 
  ************/ 
+
+
 /***
  * 
- * This function will take a container, and whilst it has 1 or more child elements, they will all be removed.
+ * This function will take a container, and whilst it has 1 or more child elements, they will all be removed. This will be applied on load for the T-shirt color selection.
  */
 
 function removeAllChildNodes(parent) {
-    for(let i =0; i < tShirtSelection.length;i++){
-        if(typeof tShirtSelection[i] !== 'undefined'){
-            tShirtSelectionNodes.push(tShirtSelection[i]);
-        }
-
-    }
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
@@ -73,20 +72,7 @@ other.style.transition = 'all .3s ease-in';
 other.style.opacity = '0';
 other.style.top = '20px';
 
-// adding a choose here option for the job role seletion element
-window.onload = (() =>{
 
-    jobRoleSelect.prepend( selectedOption('option', 'Choose here', 'disabled', 'selected'));
-
-    tShirt();
-})
-
-// Removed all options in the color selection element and preappends on option element.
-
- function tShirt (){
-    removeAllChildNodes(tShirtSelection);
-    tShirtSelection.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected'));
-   }
    
 
 /*****************************************************************************************************************************************
@@ -120,36 +106,66 @@ jobRoleSelect.addEventListener('change', e =>{
  * 
  ************/ 
 
+
+// This section will contain instrctions for the T-shirt info section. Actions will be taken before the change event listener begins.
+
+/***
+ * 1. This will push all htmlnodes contained in the tShirtSelectionColor variable to the js_puns variable
+ */
+
+     for(let i =0; i < tShirtSelectionColor.length;i++){
+        if(typeof tShirtSelectionColor[i] !== 'undefined'){
+            js_puns.push(tShirtSelectionColor[i]);
+            console.log(js_puns)
+        }
+        }
+
+/***** */
+
+/***
+ * 2. On load, the children of tShirtSelectionColor will be removed. Each child will be appended again, depending on the value of the design selection element.
+ */
+
+    window.onload = (() =>{
+        removeAllChildNodes(tShirtSelectionColor); 
+        tShirtSelectionColor.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected'));
+    });
+
+/***
+ 
+ * 3. The let variable iLoveJs will take the last 3 options from the js_puns variable and store it, therefore dividing the tShirtSelectionColor by 2 and storing them in variables.
+ */
+
+    iLoveJs = js_puns.splice(3, 6); // this takes away the last 3 options from the variable above and stores it in this one. Each now have 3
+
+/***** */
+
+/***
+ 
+ * 4. In this change event, the children of js_puns and iLoveJs will appended to the tShirtSelectionColor node, depending on the value of designSelection selection element.
+ */
+
     designSelection.addEventListener('change', e =>{
-        if(designSelection.value !== 'select theme'){ // this will only effect selectable options
 
-
-
-            const js_puns = tShirtSelectionNodes; // adds converted array of theme options to variabl
-            const iLoveJs = js_puns.splice(3, 6); // this takes away the last 3 options from the variable above and stores it in this one. Each now have 3
-            console.log(js_puns);
-            console.log(iLoveJs);
-
-            if(designSelection.value === 'js puns'){ // if the option value of selection is 'js puns', run the following code block. 
+            if(designSelection.value === 'js puns' ){ // if the option value of selection is 'js puns', run the following code block. 
+                removeAllChildNodes(tShirtSelectionColor); // removes all child nodes before appending begins.
+                tShirtSelectionColor.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected')); // appends disabled option first.
                 for(let i =0; i < js_puns.length;i++){ // loops through all 3 options in the js_puns variable
-                removeAllChildNodes(tShirtSelection); 
-                tShirtSelection.appendChild(js_puns[i]) // appends all options in the js puns variable to the tShirtSelection variable.
+                tShirtSelectionColor.appendChild(js_puns[i]) // appends all options in the js puns variable to the tShirtSelection variable.
                 }                                        
-            } else {                                    // if the option value of selection is 'iLoveJs', run the following code block. 
+            } else {
+                removeAllChildNodes(tShirtSelectionColor);  // if the option value of selection is iLoveJs, run the following code block. 
+                tShirtSelectionColor.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected')); // appends disabled option first.
                 for(let i =0; i < iLoveJs.length;i++){  // loops through all 3 options in the iLoveJsvariable
-                removeAllChildNodes(tShirtSelection);  // removed all nodes from selection element
-                tShirtSelection.appendChild(iLoveJs[i]); // appends all options in the js puns variable to the tShirtSelection variable.
+                tShirtSelectionColor.appendChild(iLoveJs[i]); // appends all options in the iLoveJs variable to the tShirtSelection variable.
                 }
             }
 
         
-            } else{ // if the value of the selection element is 'select a theme' then all options will be removed, and a new option will be appended.
-                removeAllChildNodes(tShirtSelection);
-                tShirtSelection.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected'));
-            }
+
     })
 
 
 
-
+/***** */
 
