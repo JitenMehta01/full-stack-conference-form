@@ -166,6 +166,7 @@ option {
 	border-radius: 4px;
 }
 
+
 /* ================================= 
   Helper Classes
 ==================================== */
@@ -213,4 +214,15 @@ option {
 	label {
 		clear: both;
 	}
+}
+
+/* ================================= 
+  post project initailization
+==================================== */
+#other, #shirt-colors{
+	display:none;
+	position: relative;
+	transition: all .3s ease-in;
+	opacity: 0;
+	top:20px;
 }

@@ -1,11 +1,10 @@
 /*****************************************************************************************************************************************
  * 
- * VA\RIABLES
+ * VARIABLES
  * 
  ************/ 
 
 const firstInputText = document.querySelector('input[type=text]');
-const other = document.querySelector('#other');
 
 const jobRoleSelect = document.querySelector('#title');
 const tShirtSelectionColor = document.querySelector('#color');  
@@ -37,23 +36,69 @@ function removeAllChildNodes(parent) {
 } // took the while loop code and adapted it from https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
 
 
+
+
 /***
  * 
- * This function will take a container, and whilst it has 1 or more child elements, they will all be removed.
+ * This function will buid a option element that will be placed within a selection element.
  */ 
 
-
-
- function selectedOption (element, textContent, disabled, selected) {
+ function selectedOption (element, textContent, disabled, selected, optionValue) {
     const option = document.createElement(element);
     option.textContent = textContent;
     const disable = document.createAttribute(disabled);
     const select = document.createAttribute(selected);
     option.setAttributeNode(disable);
     option.setAttributeNode(select);
+    option.value = optionValue;
    
     return option;
  }
+ 
+function elementAnimation (element) {
+    window.setTimeout(() => {
+        element.style.opacity = '1';
+        element.style.top = '0px';
+    }, 100);
+
+}
+
+/***
+ * 
+ * This function will add a setTimeout animation to a whatever arguement is passed.
+ */ 
+
+function elementAnimation (element) {
+    window.setTimeout(() => {
+        element.style.opacity = '1';
+        element.style.top = '0px';
+    }, 100);
+}
+
+
+// This function will hide and show html nodes. This function is used in 2 placed so far.
+// It is called when the user clicks on the t-shirt theme selection element. 
+// It is also called when the user clicks on the on the other option when the job selected element is clicked.
+// This function initally hides the element, and then animates in when the respective element is triggered, and hides when another option is clicked.
+
+ function showOrhideOption (element,selection,optionValue, isNotvalue) {
+    const node = document.querySelector(`#${element}`);
+    if(selection.value === optionValue) {
+        node.style.display = 'block';
+        elementAnimation(node);
+    } else if(selection.value !== isNotvalue && optionValue === null){
+        node.style.display = 'block';
+        console.log(node);
+        elementAnimation(node);
+    }
+    else {
+        node.style.opacity = '0';
+        node.style.top = '40px';
+        window.setTimeout(() =>{
+            node.style.display = 'none';
+        }, 400)
+        }
+};
 
 
 
@@ -65,13 +110,6 @@ function removeAllChildNodes(parent) {
 
 firstInputText.focus();// selects the first input field and adds focus.
 
-// Hiding the other text field on load
-other.style.display = 'none';
-other.style.position = 'relative';
-other.style.transition = 'all .3s ease-in';
-other.style.opacity = '0';
-other.style.top = '20px';
-
 
    
 
@@ -81,24 +119,15 @@ other.style.top = '20px';
  * 
  ************/ 
 
-// Revealing text field is user clicks on other
+// Revealing text field is user clicks on other. This function uses setTimeout to delay the vibibility of the other input field. It will also have a in and out animation.
 
 jobRoleSelect.addEventListener('change', e =>{
-    if(jobRoleSelect.value === 'other'){
-        other.style.display = 'block';
-        window.setTimeout(() => {
-            other.style.opacity = '1';
-            other.style.top = '0px';
-        }, 100);
 
-    } else if(jobRoleSelect.value !== 'Other'){
-            other.style.opacity = '0';
-            other.style.top = '40px';
-            window.setTimeout(() =>{
-                other.style.display = 'none';
-            }, 400)
-    }
-})
+    showOrhideOption(`other`, jobRoleSelect, 'other')
+
+});
+
+
 
 /*****************************************************************************************************************************************
  * 
@@ -116,7 +145,7 @@ jobRoleSelect.addEventListener('change', e =>{
      for(let i =0; i < tShirtSelectionColor.length;i++){
         if(typeof tShirtSelectionColor[i] !== 'undefined'){
             js_puns.push(tShirtSelectionColor[i]);
-            console.log(js_puns)
+            console.log('Js puns', js_puns);
         }
         }
 
@@ -128,7 +157,7 @@ jobRoleSelect.addEventListener('change', e =>{
 
     window.onload = (() =>{
         removeAllChildNodes(tShirtSelectionColor); 
-        tShirtSelectionColor.prepend( selectedOption('option', 'Please select a T-shirt theme', 'disabled', 'selected'));
+        tShirtSelectionColor.prepend( selectedOption('option', 'Please select a T-shirt color', 'disabled', 'selected', 't-shirt_color'));
     });
 
 /***
@@ -136,7 +165,7 @@ jobRoleSelect.addEventListener('change', e =>{
  * 3. The let variable iLoveJs will take the last 3 options from the js_puns variable and store it, therefore dividing the tShirtSelectionColor by 2 and storing them in variables.
  */
 
-    iLoveJs = js_puns.splice(3, 6); // this takes away the last 3 options from the variable above and stores it in this one. Each now have 3
+    iLoveJs = js_puns.splice(3, 6); // this takes away the last 3 options from the variable above and stores it in this one. 
 
 /***** */
 
@@ -146,6 +175,8 @@ jobRoleSelect.addEventListener('change', e =>{
  */
 
     designSelection.addEventListener('change', e =>{
+
+        showOrhideOption(`shirt-colors`, designSelection, null, 'select_tshirt_design'); // this function hides or shows the t-shirt color selection. It will get triggered when the user clicks on a t-shirt theme.
 
             if(designSelection.value === 'js puns' ){ // if the option value of selection is 'js puns', run the following code block. 
                 removeAllChildNodes(tShirtSelectionColor); // removes all child nodes before appending begins.
