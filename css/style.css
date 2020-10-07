@@ -226,3 +226,7 @@ option {
 	opacity: 0;
 	top:20px;
 }
+
+.activities label{
+	display: flex;
+}

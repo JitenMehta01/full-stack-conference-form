@@ -8,6 +8,7 @@ const firstInputText = document.querySelector('input[type=text]');
 
 const jobRoleSelect = document.querySelector('#title');
 const tShirtSelectionColor = document.querySelector('#color');  
+const activityFieldSet = document.querySelector('.activities');  
 
 const js_puns = []; // All t-shirt colour options will be pushed to this array.
 let iLoveJs; // All iloveJs colour tshirts will be spliced from js_puns and pushed into this variable.
@@ -54,26 +55,49 @@ function removeAllChildNodes(parent) {
    
     return option;
  }
- 
-function elementAnimation (element) {
-    window.setTimeout(() => {
-        element.style.opacity = '1';
-        element.style.top = '0px';
-    }, 100);
 
-}
 
 /***
  * 
  * This function will add a setTimeout animation to a whatever arguement is passed.
  */ 
-
-function elementAnimation (element) {
+ 
+function elementAnimationIn (element) {
     window.setTimeout(() => {
         element.style.opacity = '1';
         element.style.top = '0px';
     }, 100);
+
 }
+
+function elementAnimationOut (element){
+    element.style.opacity = '0';
+    element.style.top = '40px';
+    window.setTimeout(() =>{
+        element.style.display = 'none';
+    }, 400)
+}
+
+/***
+ * 
+ * This function create a red alert DOM element
+ */ 
+
+ function redAlert() {
+    const div = document.createElement('div');
+    div.className = 'conflict-alert';
+    div.style.marginLeft = 'auto';
+    
+    const span = document.createElement('span');
+    span.style.display = 'block';
+    span.style.backgroundColor = 'red';
+    span.style.borderRadius = '15px';
+    span.style.width = '15px';
+    span.style.height = '15px';                
+    div.appendChild(span);
+
+    return div;
+ }
 
 
 // This function will hide and show html nodes. This function is used in 2 placed so far.
@@ -85,18 +109,14 @@ function elementAnimation (element) {
     const node = document.querySelector(`#${element}`);
     if(selection.value === optionValue) {
         node.style.display = 'block';
-        elementAnimation(node);
+        elementAnimationIn(node);
     } else if(selection.value !== isNotvalue && optionValue === null){
         node.style.display = 'block';
         console.log(node);
-        elementAnimation(node);
+        elementAnimationIn(node);
     }
     else {
-        node.style.opacity = '0';
-        node.style.top = '40px';
-        window.setTimeout(() =>{
-            node.style.display = 'none';
-        }, 400)
+        elementAnimationOut(node);
         }
 };
 
@@ -199,4 +219,54 @@ jobRoleSelect.addEventListener('change', e =>{
 
 
 /***** */
+
+/***
+ 
+ * 5. In this change event, the children of js_puns and iLoveJs will appended to the tShirtSelectionColor node, depending on the value of designSelection selection element.
+ */
+
+// check if the event is a checkbox
+// loop over all checkboxes
+// store all checkboxes in a var
+// store all e.target data types in a var
+// store the event.target in a var
+// compare if the event data type and iteration data type is the same. Also check if what the user has clicked on is not the same as each iteration of checkboxes
+
+activityFieldSet.addEventListener('change', e =>{ // event listener for the activity fieldset element.
+    const allCheckboxes = activityFieldSet.querySelectorAll('label input'); // creates a node list of all checkboxes within the acvtivty element
+    if(e.target.tagName === 'INPUT'){ // checks is the user has clicked on a checkbox
+        
+        for(let i =0; i < allCheckboxes.length; i++){ // loops over all checkboxes
+        const checkDataType =  allCheckboxes[i].getAttribute('data-day-and-time'); // stores the data type of each iteration of the checkbox
+        const checkEventType = e.target.getAttribute('data-day-and-time'); // stores the data type of the event (what checkbox the user has clicked on)
+        const checkTarget = e.target; // stores the event target
+
+        if(checkDataType === checkEventType && checkTarget !== allCheckboxes[i]){ // if the event data type and the checkbox iteration datatype are the same, and if the event checkbox is not equal to the iterated checkbox, run the code.
+            const checkboxlabel = allCheckboxes[i].parentNode // grabs the label of conficted checkboxes
+            const div = redAlert(); // stores a red alert div element
+
+                if(checkTarget.checked && checkboxlabel.childElementCount <= 1){ // if the user event is checked and the label has no more then 1 child elements, run the code block.
+                    allCheckboxes[i].disabled = true; // disable conflicting checkboxes
+                        checkboxlabel.appendChild(div); // append the red alert to indicate the confliction of aciticity
+                } 
+                else {
+                allCheckboxes[i].disabled = false; // once unchecked, enable other conflicting aciticities
+                const div = document.querySelector('.conflict-alert'); // stores the red alert div
+                checkboxlabel.removeChild(div); // removes red alert div from DOM
+                }
+        }
+
+        }
+    }
+})
+
+
+
+/***** */
+
+
+
+
+
+
 
