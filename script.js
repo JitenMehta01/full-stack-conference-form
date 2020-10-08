@@ -222,15 +222,11 @@ jobRoleSelect.addEventListener('change', e =>{
 
 /***
  
- * 5. In this change event, the children of js_puns and iLoveJs will appended to the tShirtSelectionColor node, depending on the value of designSelection selection element.
+ * 5. In this change event, all checkboxes in the register for acitivties section will be looped over. 
+ When a user clicks on a checkbox, events on the same day and time will be disabled, and also a red dot will appear next to the conflicted event.
  */
 
-// check if the event is a checkbox
-// loop over all checkboxes
-// store all checkboxes in a var
-// store all e.target data types in a var
-// store the event.target in a var
-// compare if the event data type and iteration data type is the same. Also check if what the user has clicked on is not the same as each iteration of checkboxes
+
 
 activityFieldSet.addEventListener('change', e =>{ // event listener for the activity fieldset element.
     const allCheckboxes = activityFieldSet.querySelectorAll('label input'); // creates a node list of all checkboxes within the acvtivty element
@@ -238,16 +234,22 @@ activityFieldSet.addEventListener('change', e =>{ // event listener for the acti
         
         for(let i =0; i < allCheckboxes.length; i++){ // loops over all checkboxes
         const checkDataType =  allCheckboxes[i].getAttribute('data-day-and-time'); // stores the data type of each iteration of the checkbox
+        const checkDataPrice =  parseInt(e.target.getAttribute('data-cost')); // stores the data type of each iteration of the checkbox
         const checkEventType = e.target.getAttribute('data-day-and-time'); // stores the data type of the event (what checkbox the user has clicked on)
         const checkTarget = e.target; // stores the event target
+        let total = 0;
+
+        if(checkTarget === allCheckboxes[i]){
+            console.log(total += checkDataPrice);
+        }
 
         if(checkDataType === checkEventType && checkTarget !== allCheckboxes[i]){ // if the event data type and the checkbox iteration datatype are the same, and if the event checkbox is not equal to the iterated checkbox, run the code.
-            const checkboxlabel = allCheckboxes[i].parentNode // grabs the label of conficted checkboxes
+            const checkboxlabel = allCheckboxes[i].parentNode // grabs the label of conflicted checkboxes
             const div = redAlert(); // stores a red alert div element
 
                 if(checkTarget.checked && checkboxlabel.childElementCount <= 1){ // if the user event is checked and the label has no more then 1 child elements, run the code block.
                     allCheckboxes[i].disabled = true; // disable conflicting checkboxes
-                        checkboxlabel.appendChild(div); // append the red alert to indicate the confliction of aciticity
+                    checkboxlabel.appendChild(div); // append the red alert to indicate the confliction of aciticity
                 } 
                 else {
                 allCheckboxes[i].disabled = false; // once unchecked, enable other conflicting aciticities
@@ -270,3 +272,4 @@ activityFieldSet.addEventListener('change', e =>{ // event listener for the acti
 
 
 
+// is user clicks on a event, a string names total will appear along with the total price of all selected activities.
