@@ -326,27 +326,34 @@ activityFieldSet.addEventListener('change', e =>{ // event listener for the acti
 // NOTE: The user should not be able to select the "Select Payment Method" option from the payment select menu, because the user should not be able to submit the form without a chosen payment option.
 
 
+// on load the paypal and bitcoin sections will have a display value of none.
 payPal.style.display = 'none';
 bitCoin.style.display = 'none';
+
+// function to hide or show payment sections
+
+function paymentMethod (element1, element2,element3, display1, display2){
+element1.style.display = display1;
+element2.style.display = display1;
+element3.style.display = display2;
+
+}
 
 
 PaymentSelect.addEventListener('click', e =>{
     for(let i=1; i < PaymentSelect.length; i++){
 
         if(PaymentSelect.value === 'paypal' && PaymentSelect.value !== PaymentSelect[i]){
-            creditCard.style.display = 'none';
-            bitCoin.style.display = 'none';
-            payPal.style.display = 'block';
+
+            paymentMethod(creditCard, bitCoin, payPal, 'none', 'block');
         }
         else if (PaymentSelect.value === 'bitcoin' && PaymentSelect.value !== PaymentSelect[i]){
-            creditCard.style.display = 'none';
-            payPal.style.display = 'none';   
-            bitCoin.style.display = 'block';              
+       
+            paymentMethod(creditCard, payPal, bitCoin, 'none', 'block');            
+            
         }
         else{
-            creditCard.style.display = 'block';
-            payPal.style.display = 'none';
-            bitCoin.style.display = 'none';
+            paymentMethod(payPal, bitCoin, creditCard, 'none', 'block');   
 
         }
     }
