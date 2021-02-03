@@ -4,7 +4,7 @@
  * 
  ************/ 
 
-const firstInputText = document.querySelector('input[type=text]');
+const firstInputText = document.getElementById('name');
 
 const jobRoleSelect = document.querySelector('#title');
 const tShirtSelectionColor = document.querySelector('#color');  
@@ -15,6 +15,12 @@ let iLoveJs; // All iloveJs colour tshirts will be spliced from js_puns and push
 
 const designSelection = document.querySelector('#design');  
 
+
+// payment section variables
+const creditCard = document.getElementById('credit-card');
+const payPal = document.getElementById('paypal');
+const bitCoin = document.getElementById('bitcoin');
+const PaymentSelect = document.getElementById('payment');
 
 
 
@@ -100,7 +106,7 @@ function elementAnimationOut (element){
  }
 
 
-// This function will hide and show html nodes. This function is used in 2 placed so far.
+// This function will hide and show html nodes. This function is used in 2 places so far.
 // It is called when the user clicks on the t-shirt theme selection element. 
 // It is also called when the user clicks on the on the other option when the job selected element is clicked.
 // This function initally hides the element, and then animates in when the respective element is triggered, and hides when another option is clicked.
@@ -139,13 +145,13 @@ firstInputText.focus();// selects the first input field and adds focus.
  * 
  ************/ 
 
-// Revealing text field is user clicks on other. This function uses setTimeout to delay the vibibility of the other input field. It will also have a in and out animation.
+// Revealing text field as user clicks on other. This function uses setTimeout to delay the vibibility of the other input field. It will also have a in and out animation.
 
 jobRoleSelect.addEventListener('change', e =>{
 
     showOrhideOption(`other`, jobRoleSelect, 'other')
 
-});
+} );
 
 
 
@@ -227,7 +233,7 @@ jobRoleSelect.addEventListener('change', e =>{
  */
 
 
-
+let total = 0;
 activityFieldSet.addEventListener('change', e =>{ // event listener for the activity fieldset element.
     const allCheckboxes = activityFieldSet.querySelectorAll('label input'); // creates a node list of all checkboxes within the acvtivty element
     if(e.target.tagName === 'INPUT'){ // checks is the user has clicked on a checkbox
@@ -237,17 +243,48 @@ activityFieldSet.addEventListener('change', e =>{ // event listener for the acti
         const checkDataPrice =  parseInt(e.target.getAttribute('data-cost')); // stores the data type of each iteration of the checkbox
         const checkEventType = e.target.getAttribute('data-day-and-time'); // stores the data type of the event (what checkbox the user has clicked on)
         const checkTarget = e.target; // stores the event target
-        let total = 0;
 
         if(checkTarget === allCheckboxes[i]){
-            console.log(total += checkDataPrice);
-        }
+            const p = document.createElement('p');
+            p.className = 'reg-activities-total';
+
+            const parentLength = activityFieldSet.children.length -1;
+            const placement = activityFieldSet.children[parentLength];
+
+            if(checkTarget.checked){
+                 p.textContent = `Your total is £${total += checkDataPrice}`;
+
+                if(total > 0){
+                    activityFieldSet.insertBefore(p, placement);
+
+                    if(activityFieldSet.contains(p)){
+                        const pDOM = document.querySelector('.reg-activities-total');
+                            activityFieldSet.removeChild(pDOM);
+                            activityFieldSet.insertBefore(p, placement);
+                    }
+                }
+
+
+                
+            } else {
+                const pDOM = document.querySelector('.reg-activities-total');
+                p.textContent = `Your total is £${total -= checkDataPrice}`;
+
+                    if (total <= 0){
+                        activityFieldSet.removeChild(pDOM); // if total is less then 0 then it will be removed only when uncheked.
+                    } else{
+                        activityFieldSet.removeChild(pDOM);
+                        activityFieldSet.insertBefore(p, placement); // when the value of 0 decreases, the current p element will be removed and updated with a new p element
+                    }
+            }
+            }
+
 
         if(checkDataType === checkEventType && checkTarget !== allCheckboxes[i]){ // if the event data type and the checkbox iteration datatype are the same, and if the event checkbox is not equal to the iterated checkbox, run the code.
             const checkboxlabel = allCheckboxes[i].parentNode // grabs the label of conflicted checkboxes
             const div = redAlert(); // stores a red alert div element
 
-                if(checkTarget.checked && checkboxlabel.childElementCount <= 1){ // if the user event is checked and the label has no more then 1 child elements, run the code block.
+                if(checkTarget.checked && checkboxlabel.childElementCount <= 1){ // if the user event has checked and the label has no more then 1 child elements, run the code block.
                     allCheckboxes[i].disabled = true; // disable conflicting checkboxes
                     checkboxlabel.appendChild(div); // append the red alert to indicate the confliction of aciticity
                 } 
@@ -269,7 +306,49 @@ activityFieldSet.addEventListener('change', e =>{ // event listener for the acti
 
 
 
-
+/*****************************************************************************************************************************************
+ * 
+ * PAYMENT SECTION
+ * 
+ ************/ 
 
 
 // is user clicks on a event, a string names total will appear along with the total price of all selected activities.
+
+
+// "Payment Info" section
+
+//     Display payment sections based on the payment option chosen in the select menu.
+//     The "Credit Card" payment option should be selected by default. Display the #credit-card div, and hide the "PayPal" and "Bitcoin" information. Payment option in the select menu should match the payment option displayed on the page.
+//     When a user selects the "PayPal" payment option, the PayPal information should display, and the credit card and “Bitcoin” information should be hidden.
+//     When a user selects the "Bitcoin" payment option, the Bitcoin information should display, and the credit card and “PayPal” information should be hidden.
+
+// NOTE: The user should not be able to select the "Select Payment Method" option from the payment select menu, because the user should not be able to submit the form without a chosen payment option.
+
+
+payPal.style.display = 'none';
+bitCoin.style.display = 'none';
+
+
+PaymentSelect.addEventListener('click', e =>{
+    for(let i=1; i < PaymentSelect.length; i++){
+
+        if(PaymentSelect.value === 'paypal' && PaymentSelect.value !== PaymentSelect[i]){
+            creditCard.style.display = 'none';
+            bitCoin.style.display = 'none';
+            payPal.style.display = 'block';
+        }
+        else if (PaymentSelect.value === 'bitcoin' && PaymentSelect.value !== PaymentSelect[i]){
+            creditCard.style.display = 'none';
+            payPal.style.display = 'none';   
+            bitCoin.style.display = 'block';              
+        }
+        else{
+            creditCard.style.display = 'block';
+            payPal.style.display = 'none';
+            bitCoin.style.display = 'none';
+
+        }
+    }
+})
+
