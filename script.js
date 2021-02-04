@@ -418,14 +418,15 @@ function creditCardValidation () {
 }
 
 function errormessage (refNode){
-    if(! refNode.previousElementSibling.tagName === 'P'){
-    const p = document.createElement('p');
+    const p = refNode.previousElementSibling;
     const parent = refNode.parentNode;
-    p.textContent = ` There is something wrong. Please provide the correct information.`;
-    p.style.fontWeight = '600';
-    p.style.color = 'red';
-    p.id = 'error';
-    parent.insertBefore(p, refNode);
+    if(p.tagName !== 'P'){
+    const para = document.createElement('p');
+    para.textContent = ` There is something wrong. Please provide the correct information.`;
+    para.style.fontWeight = '600';
+    para.style.color = 'red';
+    para.id = 'error';
+    parent.insertBefore(para, refNode);
     }
 
     else{
@@ -449,14 +450,14 @@ form.addEventListener('submit', e =>{
         errormessage(NameInputField);
     }
     
-    // if(!emailValidation()){
-    //     e.preventDefault();
-    //     errormessage(MailInputField);
-    // }
+    if(!emailValidation()){
+        e.preventDefault();
+        errormessage(MailInputField);
+    }
 
-    // if(!acvtivitiesValidation()){
-    //     e.preventDefault();
-    //     errormessage(activityFieldSet.firstElementChild);
+    if(!acvtivitiesValidation()){
+        e.preventDefault();
+        errormessage(activityFieldSet.lastElementChild);
 
-    // }
+     }
 })
