@@ -3,12 +3,18 @@
  * VARIABLES
  * 
  ************/ 
+const form = document.querySelector('form');
 
-const firstInputText = document.getElementById('name');
+const NameInputField = document.getElementById('name');
+const MailInputField = document.getElementById('mail');
+const personalDetails = document.getElementById('personal-details');
+
 
 const jobRoleSelect = document.querySelector('#title');
 const tShirtSelectionColor = document.querySelector('#color');  
 const activityFieldSet = document.querySelector('.activities');  
+const activityFieldSetInput = document.querySelectorAll('.activities input');
+
 
 const js_puns = []; // All t-shirt colour options will be pushed to this array.
 let iLoveJs; // All iloveJs colour tshirts will be spliced from js_puns and pushed into this variable.
@@ -134,7 +140,7 @@ function elementAnimationOut (element){
  * 
  ************/ 
 
-firstInputText.focus();// selects the first input field and adds focus.
+NameInputField.focus();// selects the first input field and adds focus.
 
 
    
@@ -359,3 +365,98 @@ PaymentSelect.addEventListener('click', e =>{
     }
 })
 
+/*****************************************************************************************************************************************
+ * 
+ * FORM VALIDATION SECTION
+ * 
+ ************/ 
+
+    // functions to validate different sections of the form
+
+ function nameValidation (){
+    if(NameInputField.value.length > 0){
+        NameInputField.style.borderColor = '#5fcf80';
+        if(NameInputField.previousElementSibling.tagName = 'P'){
+            personalDetails.removeChild(NameInputField.previousElementSibling);
+        }
+        return true;
+    } else {
+        NameInputField.style.borderColor = 'red';
+        return false;
+    }
+ }
+
+ function emailValidation (){
+    const indexofat = MailInputField.value.indexOf('@');
+    const indexofdot = MailInputField.value.indexOf('.');
+
+    if(indexofat > 1 && indexofdot > indexofdot){
+        MailInputField.style.borderColor = '#5fcf80';
+        return true;
+    } else{
+        MailInputField.style.borderColor = 'red';
+        return false;
+    }
+
+
+ }
+
+function acvtivitiesValidation (){
+    for(let i =0;i < activityFieldSetInput.length; i++){
+        if(activityFieldSetInput[i].checked){
+            activityFieldSet.style.borderColor = '#5fcf80';
+            return true;
+        }
+    }
+    activityFieldSet.style.borderColor = 'red';
+    return false;
+
+}
+
+function creditCardValidation () {
+
+}
+
+function errormessage (refNode){
+    if(! refNode.previousElementSibling.tagName === 'P'){
+    const p = document.createElement('p');
+    const parent = refNode.parentNode;
+    p.textContent = ` There is something wrong. Please provide the correct information.`;
+    p.style.fontWeight = '600';
+    p.style.color = 'red';
+    p.id = 'error';
+    parent.insertBefore(p, refNode);
+    }
+
+    else{
+        parent.removeChild(p);
+    }
+
+
+}
+
+
+
+// calling functions on form and preventing submission if functions return false
+
+form.addEventListener('submit', e =>{
+    nameValidation();
+    emailValidation();
+    acvtivitiesValidation();
+
+    if(!nameValidation()){
+        e.preventDefault();
+        errormessage(NameInputField);
+    }
+    
+    // if(!emailValidation()){
+    //     e.preventDefault();
+    //     errormessage(MailInputField);
+    // }
+
+    // if(!acvtivitiesValidation()){
+    //     e.preventDefault();
+    //     errormessage(activityFieldSet.firstElementChild);
+
+    // }
+})
