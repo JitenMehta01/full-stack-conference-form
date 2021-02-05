@@ -369,14 +369,21 @@ PaymentSelect.addEventListener('click', e =>{
  * 
  * FORM VALIDATION SECTION
  * 
+ * 
+    // functions to validate different sections of the form
+ * 
  ************/ 
 
-    // functions to validate different sections of the form
+    // NAME VALIDATION
+
+    // This function evaluates the length of the input from the user in the name field. If it is more then 0 then we will indicate they have inputted
+    // the right details. Also if there was an error message from a previous mistake, this will be removed once the user clicks the submit button.
+    // If filled out correctly the function will return true. If not, it will return false.
 
  function nameValidation (){
     if(NameInputField.value.length > 0){
         NameInputField.style.borderColor = '#5fcf80';
-        if(NameInputField.previousElementSibling.tagName = 'P'){
+        if(NameInputField.previousElementSibling.tagName === 'P'){
             personalDetails.removeChild(NameInputField.previousElementSibling);
         }
         return true;
@@ -386,12 +393,21 @@ PaymentSelect.addEventListener('click', e =>{
     }
  }
 
+ // EMAIL VALIDATION
+
+ // Firstly, we have 2 variables which store the index (positioning) of the @ and . symbols of the email address the user has typed in.
+ // We then check if the @ symbols position is more then 1, and then . comes after the @ symbol.
+ // If so then the function will return true, if not it will return false.
+
  function emailValidation (){
     const indexofat = MailInputField.value.indexOf('@');
     const indexofdot = MailInputField.value.indexOf('.');
 
-    if(indexofat > 1 && indexofdot > indexofdot){
+    if(indexofat > 1 && indexofdot > indexofat){
         MailInputField.style.borderColor = '#5fcf80';
+        if(MailInputField.previousElementSibling.tagName === 'P'){
+            personalDetails.removeChild(MailInputField.previousElementSibling);
+        }
         return true;
     } else{
         MailInputField.style.borderColor = 'red';
@@ -401,6 +417,11 @@ PaymentSelect.addEventListener('click', e =>{
 
  }
 
+ // ACTIVITES VALIDATION
+
+ // This function loops over each of the checkboxes in activities field. If any of the checkboxes are checked then the function
+ // will return true. If not it will return false.
+
 function acvtivitiesValidation (){
     for(let i =0;i < activityFieldSetInput.length; i++){
         if(activityFieldSetInput[i].checked){
@@ -408,7 +429,6 @@ function acvtivitiesValidation (){
             return true;
         }
     }
-    activityFieldSet.style.borderColor = 'red';
     return false;
 
 }
@@ -416,6 +436,15 @@ function acvtivitiesValidation (){
 function creditCardValidation () {
 
 }
+
+ // ERROR MESSAGE
+
+ // The error message will store the received arguements previouselement sibling and store it in the variable called P.
+ // Then the received arguement's parent will be stored in the varaible called parent.
+ // The aruguement received to the function will be an element. The error message will append before this element in the DOM.
+ // Then in a conditional statement, it checks if the tagName of P is not a paragraph tag. I.E does this element exist? If not, then create one and append it.
+ // If it does exist then ignore.
+
 
 function errormessage (refNode){
     const p = refNode.previousElementSibling;
@@ -429,16 +458,17 @@ function errormessage (refNode){
     parent.insertBefore(para, refNode);
     }
 
-    else{
-        parent.removeChild(p);
-    }
 
 
 }
 
 
 
-// calling functions on form and preventing submission if functions return false
+// EVENT LISTENERS FOR VALIDATION
+
+// The validation functions are called when the submit button is clicked on the form.
+// Since the validation functions either return true or false, if any of the validation functions are false it will prevent from the form being submitted.
+
 
 form.addEventListener('submit', e =>{
     nameValidation();
