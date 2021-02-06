@@ -23,10 +23,15 @@ const designSelection = document.querySelector('#design');
 
 
 // payment section variables
+const paymentField = document.getElementById('payment-container');
 const creditCard = document.getElementById('credit-card');
 const payPal = document.getElementById('paypal');
 const bitCoin = document.getElementById('bitcoin');
 const PaymentSelect = document.getElementById('payment');
+
+const creditCardNumField = document.getElementById('cc-num');
+const zipCode = document.getElementById('zip');
+const cvv = document.getElementById('cvv');
 
 
 
@@ -132,6 +137,56 @@ function elementAnimationOut (element){
         }
 };
 
+
+// used to remove error message if it already exists.
+
+function removeerrorMEssage (element){
+    for(let i =0; i < element.children.length; i++){ // REMOVES ERROR MESSSAGE IF IT EXISTS
+        if(element.children[i].tagName === 'P'){
+            element.removeChild(element.children[i])
+        }
+}
+}
+
+ // ERROR MESSAGE
+
+ // The error message will store the received arguements previouselement sibling and store it in the variable called P.
+ // Then the received arguement's parent will be stored in the varaible called parent.
+ // The aruguement received to the function will be an element. The error message will append before this element in the DOM.
+ // Then in a conditional statement, it checks if the tagName of P is not a paragraph tag. I.E does this element exist? If not, then create one and append it.
+ // If it does exist then ignore.
+
+
+ function errormessage (refNode){
+    const p = refNode.previousElementSibling;
+    const parent = refNode.parentNode;
+    if(p.tagName !== 'P'){
+    const para = document.createElement('p');
+    para.textContent = ` There is something wrong. Please provide the correct information.`;
+    para.style.fontWeight = '600';
+    para.style.color = 'red';
+    para.id = 'error';
+    parent.insertBefore(para, refNode);
+    }
+
+}
+
+
+
+// HELPER FUNCTION TO FACTOR REPEATED CODE FOR ZIP AND CVV FUNCTIONS
+
+function evaulauteFieldlength (element, number, parent){
+    if( typeof parseInt(element.value) === 'number'){
+        if(element.value.length === number ){
+            element.style.borderColor = '#5fcf80';
+            removeerrorMEssage(parent);
+            return true;
+        } else{
+            element.style.borderColor = 'red';
+            return false;
+        }
+    } 
+}
 
 
 /*****************************************************************************************************************************************
@@ -251,10 +306,10 @@ activityFieldSet.addEventListener('change', e =>{ // event listener for the acti
         const checkTarget = e.target; // stores the event target
 
         if(checkTarget === allCheckboxes[i]){
-            const p = document.createElement('p');
+            const p = document.createElement('h3');
             p.className = 'reg-activities-total';
 
-            const parentLength = activityFieldSet.children.length -1;
+            const parentLength = activityFieldSet.children.length;
             const placement = activityFieldSet.children[parentLength];
 
             if(checkTarget.checked){
@@ -292,7 +347,7 @@ activityFieldSet.addEventListener('change', e =>{ // event listener for the acti
 
                 if(checkTarget.checked && checkboxlabel.childElementCount <= 1){ // if the user event has checked and the label has no more then 1 child elements, run the code block.
                     allCheckboxes[i].disabled = true; // disable conflicting checkboxes
-                    checkboxlabel.appendChild(div); // append the red alert to indicate the confliction of aciticity
+                    checkboxlabel.appendChild(div); // append the red alert to indicate the confliction of acitivity
                 } 
                 else {
                 allCheckboxes[i].disabled = false; // once unchecked, enable other conflicting aciticities
@@ -426,6 +481,13 @@ function acvtivitiesValidation (){
     for(let i =0;i < activityFieldSetInput.length; i++){
         if(activityFieldSetInput[i].checked){
             activityFieldSet.style.borderColor = '#5fcf80';
+
+            for(let i =0; i < activityFieldSet.children.length; i++){ // REMOVES ERROR MESSSAGE IF IT EXISTS
+                if(activityFieldSet.children[i].tagName === 'P'){
+                    activityFieldSet.removeChild(activityFieldSet.children[i])
+                }
+            }
+
             return true;
         }
     }
@@ -433,32 +495,55 @@ function acvtivitiesValidation (){
 
 }
 
-function creditCardValidation () {
+// This function will be called to check indibidual errors in the credit card section.
 
+function creditCarderror (message, parent){
+    if(parent.lastElementChild.tagName !== 'SMALL'){
+    const small = document.createElement('small');
+    small.style.fontSize = '12px';
+    small.style.position = 'relative';
+    small.style.top = '-15px';
+    small.style.color = 'red';
+    small.textContent = `Please provide ${message}`;
+    parent.appendChild(small);
+    }
 }
 
- // ERROR MESSAGE
+// CREDIT CARD CHECK
 
- // The error message will store the received arguements previouselement sibling and store it in the variable called P.
- // Then the received arguement's parent will be stored in the varaible called parent.
- // The aruguement received to the function will be an element. The error message will append before this element in the DOM.
- // Then in a conditional statement, it checks if the tagName of P is not a paragraph tag. I.E does this element exist? If not, then create one and append it.
- // If it does exist then ignore.
+// If the selected payment option is "Credit Card," make sure the user has supplied a Credit Card number, 
+// a Zip Code, and a 3 number CVV value before the form can be submitted.
+// Credit Card field should only accept a number between 13 and 16 digits.
+// The Zip Code field should accept a 5-digit number.
+// The CVV should only accept a number that is exactly 3 digits long.
+
+// ERORR MESSAGES AND VALIDATION FOR CVV AND ZI CODE ARE PULLED FROM HELPER FUNCTIONS ABOVE.
+
+// CREDIT CARD NUMBER VALIDATION
 
 
-function errormessage (refNode){
-    const p = refNode.previousElementSibling;
-    const parent = refNode.parentNode;
-    if(p.tagName !== 'P'){
-    const para = document.createElement('p');
-    para.textContent = ` There is something wrong. Please provide the correct information.`;
-    para.style.fontWeight = '600';
-    para.style.color = 'red';
-    para.id = 'error';
-    parent.insertBefore(para, refNode);
+function creditCardValidation (parent) {
+    const cardNumberdiv = creditCard.querySelector('.col-6');
+    if( parseInt(creditCardNumField.value) ){
+        if(creditCardNumField.value.length <= 16 && creditCardNumField.value.length >= 13){
+            creditCardNumField.style.borderColor = '#5fcf80';
+            removeerrorMEssage(parent);
+            if(cardNumberdiv.lastElementChild.tagName === 'SMALL'){
+                cardNumberdiv.removeChild(cardNumberdiv.lastElementChild);
+            }
+            return true
+        } else{
+            creditCardNumField.style.borderColor = 'red';
+            creditCarderror(`numbers between 13 and 16.`, cardNumberdiv);
+            return false;
+        }
+    } 
+
+    else{
+        creditCardNumField.style.borderColor = 'red';
+        creditCarderror(`numbers between 13 and 16.`, cardNumberdiv);
+        return false;
     }
-
-
 
 }
 
@@ -474,6 +559,7 @@ form.addEventListener('submit', e =>{
     nameValidation();
     emailValidation();
     acvtivitiesValidation();
+    creditCardValidation(paymentField);
 
     if(!nameValidation()){
         e.preventDefault();
@@ -489,5 +575,21 @@ form.addEventListener('submit', e =>{
         e.preventDefault();
         errormessage(activityFieldSet.lastElementChild);
 
+     }
+
+     if(!creditCardValidation(paymentField)){
+        e.preventDefault();
+        errormessage(paymentField.lastElementChild);
+     }
+
+     if(!evaulauteFieldlength(zipCode, 5, paymentField)){ //FUNCTION TO EVALUATE ZIPCODE
+        e.preventDefault();
+        errormessage(paymentField.lastElementChild);
+     }
+
+     if(!evaulauteFieldlength(cvv, 3, paymentField)){ //FUNCTION TO EVALUATE CVV
+        e.preventDefault();
+        errormessage(paymentField.lastElementChild);
+        
      }
 })
