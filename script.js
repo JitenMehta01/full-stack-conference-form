@@ -521,31 +521,43 @@ function creditCarderror (message, parent){
 
 // CREDIT CARD NUMBER VALIDATION
 
-
-function creditCardValidation (parent) {
-    const cardNumberdiv = creditCard.querySelector('.col-6');
-    if( parseInt(creditCardNumField.value) ){
-        if(creditCardNumField.value.length <= 16 && creditCardNumField.value.length >= 13){
-            creditCardNumField.style.borderColor = '#5fcf80';
-            removeerrorMEssage(parent);
-            if(cardNumberdiv.lastElementChild.tagName === 'SMALL'){
-                cardNumberdiv.removeChild(cardNumberdiv.lastElementChild);
-            }
-            return true
-        } else{
-            creditCardNumField.style.borderColor = 'red';
-            creditCarderror(`numbers between 13 and 16.`, cardNumberdiv);
-            return false;
-        }
-    } 
-
-    else{
-        creditCardNumField.style.borderColor = 'red';
-        creditCarderror(`numbers between 13 and 16.`, cardNumberdiv);
-        return false;
-    }
-
+function IsvalidcreditNumber (number)  {  
+    return (/^\d{13,16}$/.test(number)); // This regex will return true if numbers are between 13 and 16 digitsl long
 }
+
+// This function will be used by the creditCardVAlidation function if the regex is false.
+// Teh function will change the textcontent of teh error message depending on the error.
+function ifCreditCardisfalse (cardNumberdiv,text, textReplace, textappend ){
+    creditCardNumField.style.borderColor = 'red';
+    if(cardNumberdiv.lastElementChild.textContent.endsWith(text)){
+        cardNumberdiv.lastElementChild.textContent = (textReplace);
+    } else{
+    creditCarderror(textappend, cardNumberdiv);
+    }
+    return false;
+}
+
+// validates the input in the cred card field.
+function creditCardValidation (parent){
+    const cardNumberdiv = creditCard.querySelector('.col-6'); // credit card container
+    const noWordsorSpace = /\D\w*\s*?/; // regex which match a value that contains words and spaces but not numbers
+    if(IsvalidcreditNumber(creditCardNumField.value)){ // If the value of the credit card numbers match the IsvalidcreditNumber() regex then run the code
+        creditCardNumField.style.borderColor = '#5fcf80';
+        if(cardNumberdiv.lastElementChild.tagName === 'SMALL'){
+            cardNumberdiv.removeChild(cardNumberdiv.lastElementChild); // removes error message if it exits
+        }
+    }
+    else{
+        if( noWordsorSpace.test(creditCardNumField.value) ){ // test if the input field contains everything but numbers
+            ifCreditCardisfalse(cardNumberdiv, '16.', 'Please provide Numbers only.', 'numbers only.'); // replaced string a different error has occured
+        }
+
+       else{
+            ifCreditCardisfalse(cardNumberdiv, 'only.', 'Please provide Numbers ranging from 13-16.', 'Numbers ranging from 13-16.');// replaced string a different error has occured
+        }
+    }
+}
+
 
 
 
