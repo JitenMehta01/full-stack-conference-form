@@ -214,10 +214,13 @@ option {
 	label {
 		clear: both;
 	}
+
 }
 
+
+
 /* ================================= 
-  post project initailization
+  post project changes
 ==================================== */
 #other, #shirt-colors{
 	display:none;
@@ -229,4 +232,30 @@ option {
 
 .activities label{
 	display: flex;
+}
+
+@media(min-width:1270px){
+	.tool-tip{
+		border:red solid 2px;
+		background-color: lightcoral;
+		padding:10px;
+		display:none;
+		position:relative;
+		left:100%;
+		margin-left:32px;
+		top:-65px;
+		width:fit-content;
+		color:rgba(6, 49, 68, 0.9);
+		font-weight:700;
+
+	  }
+
+	  /*8 for credit card number field only */
+
+	  @media(min-width:1080px){
+		.cred-num-tip{
+			margin: 0 0 0 347px!important;
+			width:255px!important;
+		  }
+	}
 }

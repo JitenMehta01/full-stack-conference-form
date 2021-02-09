@@ -188,6 +188,32 @@ function evaulauteFieldlength (element, number, parent){
     } 
 }
 
+// This closure function will return a inner function that will evailaute the valididity of the arguement passed in the outer function.
+
+// If the text input is not empty and not valid then it will show a tool tip. This is triggered by the showorHideTip function.
+
+
+function createListener(validator, tipClass) {
+    return e => {
+      const text = e.target.value;
+      const valid = validator(text);
+      const showTip = text !== "" && !valid;
+      const tooltip = document.querySelector(tipClass);
+      showOrHideTip(showTip, tooltip);
+    };
+  }
+
+  // This is a simple function will will show or hide an element. This function will be mainly used by the createListener function above.
+
+  function showOrHideTip(show, element) {
+    // show element when show is true, hide when false
+    if (show) {
+      element.style.display = "inherit";
+    } else {
+      element.style.display = "none";
+    }
+  }
+
 
 /*****************************************************************************************************************************************
  * 
@@ -198,7 +224,9 @@ function evaulauteFieldlength (element, number, parent){
 NameInputField.focus();// selects the first input field and adds focus.
 
 
-   
+/*****************************************************************************************************************************************
+
+
 
 /*****************************************************************************************************************************************
  * 
@@ -436,7 +464,7 @@ PaymentSelect.addEventListener('click', e =>{
     // If filled out correctly the function will return true. If not, it will return false.
 
  function nameValidation (){
-    if(NameInputField.value.length > 0){
+    if(NameInputField.value.length > 0 && isValidName(NameInputField.value)){
         NameInputField.style.borderColor = '#5fcf80';
         if(NameInputField.previousElementSibling.tagName === 'P'){
             personalDetails.removeChild(NameInputField.previousElementSibling);
@@ -447,6 +475,17 @@ PaymentSelect.addEventListener('click', e =>{
         return false;
     }
  }
+
+
+// regex fopr name input field
+function isValidName(username) {
+    return /^[A-z ]+$/.test(username);
+  }
+
+  // event listener for input field.Look above in the helper section to understand how this closure function works.
+
+NameInputField.addEventListener('input', createListener(isValidName, '.name-tip'));
+
 
  // EMAIL VALIDATION
 
@@ -468,9 +507,14 @@ PaymentSelect.addEventListener('click', e =>{
         MailInputField.style.borderColor = 'red';
         return false;
     }
-
-
  }
+
+ function isValidEmail(email) {
+    return /^[^@]+@[^@.]+\.[a-z]+$/i.test(email);
+  }
+
+
+MailInputField.addEventListener('input', createListener(isValidEmail, '.email-tip'));
 
  // ACTIVITES VALIDATION
 
@@ -521,10 +565,6 @@ function creditCarderror (message, parent){
 
 // CREDIT CARD NUMBER VALIDATION
 
-function IsvalidcreditNumber (number)  {  
-    return (/^\d{13,16}$/.test(number)); // This regex will return true if numbers are between 13 and 16 digitsl long
-}
-
 // This function will be used by the creditCardVAlidation function if the regex is false.
 // Teh function will change the textcontent of teh error message depending on the error.
 function ifCreditCardisfalse (cardNumberdiv,text, textReplace, textappend ){
@@ -558,7 +598,24 @@ function creditCardValidation (parent){
     }
 }
 
+// regex for creditcard validation
+function IsvalidcreditNumber (number)  {  
+    return /\b(?:\d[ -]*?){13,16}\b/.test(number); // This regex will return true if numbers are between 13 and 16 digitsl long
+}
 
+creditCardNumField.addEventListener('input', createListener(IsvalidcreditNumber, '.cred-num-tip'));
+
+// reformats telephone number once validated
+
+creditCardNumField.addEventListener('blur', e =>{
+    e.target.value = formatTelephone(e.target.value);
+});
+
+// 
+function formatTelephone (number){
+const regex = /^\D*(\d{4})\D*(\d{4})\D*(\d{4})\D*(\d{1,4})*$/
+return number.replace(regex, '$1-$2-$3-$4');
+}
 
 
 // EVENT LISTENERS FOR VALIDATION

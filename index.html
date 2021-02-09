@@ -24,11 +24,14 @@
       <fieldset id = 'personal-details'>         
         <legend>Basic Info</legend>
         
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="user-name">
+        <label for="name">Name:(required)</label>
+        <input type="text" id="name" name="user-name" required>
+        <span class = 'name-tip tool-tip'>Please provide letters only</span>
+
         
-        <label for="mail">Email:</label>
-        <input type="email" id="mail" name="user-email">
+        <label for="mail">Email:(required)</label>
+        <input type="email" id="mail" name="user-email" required>
+        <span class = 'email-tip tool-tip'>Please provide a valid email address</span>
         
         <label for="title">Job Role</label>
         <select id="title" name="user-title" autocomplete="off">
@@ -84,7 +87,7 @@
       </fieldset>
 
       <fieldset class="activities">
-        <legend>Register for Activities</legend>
+        <legend>Register for Activities (select atleast one acitivity)</legend>
           <label>
             <input type="checkbox" name="all" data-cost="200" autocomplete="off"> Main Conference — $200
           </label>
@@ -115,7 +118,7 @@
           <small>If a red dot appears besides an acitivity, it means it is conflicting with another acitivty.</small>      	    
       </fieldset>
       <fieldset id = 'payment-container'>
-        <legend>Payment Info</legend>
+        <legend>Payment Info(required)</legend>
 
         <label for="payment">I'm going to pay with:</label>
         <select id="payment" name="user-payment" autocomplete="off">
@@ -129,17 +132,18 @@
 
           <div class="col-6 col">
             <label for="cc-num">Card Number:</label>
-        	  <input id="cc-num" name="user-cc-num" type="text">
+        	  <input id="cc-num" name="user-cc-num" type="text" required>
+            <span class = 'cred-num-tip tool-tip'>Please provide 13-16 numbers</span>
           </div>
 
           <div class="col-3 col">
             <label for="zip">Zip Code:</label>
-            <input id="zip" name="user-zip" type="text"> 
+            <input id="zip" name="user-zip" type="text" required> 
           </div>
 
           <div class="col-3 col">
             <label for="cvv">CVV:</label>
-            <input id="cvv" name="user-cvv" type="text"> 
+            <input id="cvv" name="user-cvv" type="text" required> 
           </div>
 
           <label for="exp-month">Expiration Date:</label>
