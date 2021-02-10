@@ -574,7 +574,6 @@ function ifCreditCardisfalse (cardNumberdiv,text, textReplace, textappend ){
     } else{
     creditCarderror(textappend, cardNumberdiv);
     }
-    return false;
 }
 
 // validates the input in the cred card field.
@@ -586,14 +585,17 @@ function creditCardValidation (parent){
         if(cardNumberdiv.lastElementChild.tagName === 'SMALL'){
             cardNumberdiv.removeChild(cardNumberdiv.lastElementChild); // removes error message if it exits
         }
+        return true;
     }
     else{
         if( noWordsorSpace.test(creditCardNumField.value) ){ // test if the input field contains everything but numbers
             ifCreditCardisfalse(cardNumberdiv, '16.', 'Please provide Numbers only.', 'numbers only.'); // replaced string a different error has occured
+            return false;
         }
 
        else{
             ifCreditCardisfalse(cardNumberdiv, 'only.', 'Please provide Numbers ranging from 13-16.', 'Numbers ranging from 13-16.');// replaced string a different error has occured
+            return false;
         }
     }
 }
