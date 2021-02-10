@@ -457,7 +457,12 @@ PaymentSelect.addEventListener('click', e =>{
  * 
  ************/ 
 
-    // NAME VALIDATION
+/**********
+ * 
+ * 
+ ***************  NAME VALIDATION
+ * 
+ * ***********/
 
     // This function evaluates the length of the input from the user in the name field. If it is more then 0 then we will indicate they have inputted
     // the right details. Also if there was an error message from a previous mistake, this will be removed once the user clicks the submit button.
@@ -487,7 +492,12 @@ function isValidName(username) {
 NameInputField.addEventListener('input', createListener(isValidName, '.name-tip'));
 
 
- // EMAIL VALIDATION
+/**********
+ * 
+ * 
+ ***************  EMAIL VALIDATION
+ * 
+ * ***********/
 
  // Firstly, we have 2 variables which store the index (positioning) of the @ and . symbols of the email address the user has typed in.
  // We then check if the @ symbols position is more then 1, and then . comes after the @ symbol.
@@ -516,7 +526,12 @@ NameInputField.addEventListener('input', createListener(isValidName, '.name-tip'
 
 MailInputField.addEventListener('input', createListener(isValidEmail, '.email-tip'));
 
- // ACTIVITES VALIDATION
+/**********
+ * 
+ * 
+ ***************  ACTIVITY VALIDATION
+ * 
+ * ***********/
 
  // This function loops over each of the checkboxes in activities field. If any of the checkboxes are checked then the function
  // will return true. If not it will return false.
@@ -553,17 +568,14 @@ function creditCarderror (message, parent){
     }
 }
 
-// CREDIT CARD CHECK
+/**********
+ * 
+ * 
+ *************** CREDIT CARD NUMBER VALIDATION
+ * 
+ * ***********/
 
-// If the selected payment option is "Credit Card," make sure the user has supplied a Credit Card number, 
-// a Zip Code, and a 3 number CVV value before the form can be submitted.
-// Credit Card field should only accept a number between 13 and 16 digits.
-// The Zip Code field should accept a 5-digit number.
-// The CVV should only accept a number that is exactly 3 digits long.
 
-// ERORR MESSAGES AND VALIDATION FOR CVV AND ZI CODE ARE PULLED FROM HELPER FUNCTIONS ABOVE.
-
-// CREDIT CARD NUMBER VALIDATION
 
 // This function will be used by the creditCardVAlidation function if the regex is false.
 // Teh function will change the textcontent of teh error message depending on the error.
@@ -578,25 +590,30 @@ function ifCreditCardisfalse (cardNumberdiv,text, textReplace, textappend ){
 
 // validates the input in the cred card field.
 function creditCardValidation (parent){
-    const cardNumberdiv = creditCard.querySelector('.col-6'); // credit card container
-    const noWordsorSpace = /\D\w*\s*?/; // regex which match a value that contains words and spaces but not numbers
-    if(IsvalidcreditNumber(creditCardNumField.value)){ // If the value of the credit card numbers match the IsvalidcreditNumber() regex then run the code
-        creditCardNumField.style.borderColor = '#5fcf80';
-        if(cardNumberdiv.lastElementChild.tagName === 'SMALL'){
-            cardNumberdiv.removeChild(cardNumberdiv.lastElementChild); // removes error message if it exits
-        }
-        return true;
+    if(PaymentSelect.value === 'credit card'){
+            const cardNumberdiv = creditCard.querySelector('.col-6'); // credit card container
+            const noWordsorSpace = /\D\w*\s*?/; // regex which match a value that contains words and spaces but not numbers
+            if(IsvalidcreditNumber(creditCardNumField.value)){ // If the value of the credit card numbers match the IsvalidcreditNumber() regex then run the code
+                creditCardNumField.style.borderColor = '#5fcf80';
+                if(cardNumberdiv.lastElementChild.tagName === 'SMALL'){
+                    cardNumberdiv.removeChild(cardNumberdiv.lastElementChild); // removes error message if it exits
+                }
+                return true;
+            }
+            else{
+                if( noWordsorSpace.test(creditCardNumField.value) ){ // test if the input field contains everything but numbers
+                    ifCreditCardisfalse(cardNumberdiv, '16.', 'Please provide Numbers only.', 'numbers only.'); // replaced string a different error has occured
+                    return false;
+                }
+
+            else{
+                    ifCreditCardisfalse(cardNumberdiv, 'only.', 'Please provide Numbers ranging from 13-16.', 'Numbers ranging from 13-16.');// replaced string a different error has occured
+                    return false;
+                }
+            }
     }
     else{
-        if( noWordsorSpace.test(creditCardNumField.value) ){ // test if the input field contains everything but numbers
-            ifCreditCardisfalse(cardNumberdiv, '16.', 'Please provide Numbers only.', 'numbers only.'); // replaced string a different error has occured
-            return false;
-        }
-
-       else{
-            ifCreditCardisfalse(cardNumberdiv, 'only.', 'Please provide Numbers ranging from 13-16.', 'Numbers ranging from 13-16.');// replaced string a different error has occured
-            return false;
-        }
+        return true;
     }
 }
 
@@ -605,16 +622,15 @@ function IsvalidcreditNumber (number)  {
     return /\b(?:\d[ -]*?){13,16}\b/.test(number); // This regex will return true if numbers are between 13 and 16 digitsl long
 }
 
-creditCardNumField.addEventListener('input', createListener(IsvalidcreditNumber, '.cred-num-tip'));
+creditCardNumField.addEventListener('input', createListener(IsvalidcreditNumber, '.cred-num-tip')); // this will create a tool tip if the number is invalidated. This createListener function will append this tool tip. You can find it above in the functions sections
 
 // reformats telephone number once validated
-
 creditCardNumField.addEventListener('blur', e =>{
-    e.target.value = formatTelephone(e.target.value);
+    e.target.value = reformatCredNumber(e.target.value); //t 
 });
 
-// 
-function formatTelephone (number){
+// regex that will check input numbers and replace with dashes if match is successful.
+function reformatCredNumber (number){
 const regex = /^\D*(\d{4})\D*(\d{4})\D*(\d{4})\D*(\d{1,4})*$/
 return number.replace(regex, '$1-$2-$3-$4');
 }
@@ -653,14 +669,16 @@ form.addEventListener('submit', e =>{
         errormessage(paymentField.lastElementChild);
      }
 
-     if(!evaulauteFieldlength(zipCode, 5, paymentField)){ //FUNCTION TO EVALUATE ZIPCODE
+     if(PaymentSelect.value === 'credit card'){
+        if(!evaulauteFieldlength(zipCode, 5, paymentField)){ //FUNCTION TO EVALUATE ZIPCODE
         e.preventDefault();
         errormessage(paymentField.lastElementChild);
-     }
 
-     if(!evaulauteFieldlength(cvv, 3, paymentField)){ //FUNCTION TO EVALUATE CVV
+     }  if(!evaulauteFieldlength(cvv, 3, paymentField)){ //FUNCTION TO EVALUATE CVV
         e.preventDefault();
         errormessage(paymentField.lastElementChild);
         
      }
+
+   }  
 })
